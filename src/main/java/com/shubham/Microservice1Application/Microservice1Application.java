@@ -1,8 +1,11 @@
 package com.shubham.Microservice1Application;
 
+import org.apache.logging.log4j.message.DefaultFlowMessageFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +29,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/messages")
 @EnableDiscoveryClient
+@EnableFeignClients
 public class Microservice1Application {
+
+	@Autowired
+	private Microservice2Client microservice2Client;
 
 	public static void main(String[] args) {
 		SpringApplication.run(Microservice1Application.class, args);
@@ -34,7 +41,19 @@ public class Microservice1Application {
 
 	@GetMapping
 	public ResponseEntity helloMessage(){
-		return new ResponseEntity("Hello from the Microservice 1", HttpStatus.OK);
+		/**
+		 * I should call the Microservice2
+		 * GET 127.0.0.1:7072/ms2/v1/messages
+		 *
+		 * Whatever be the result of the above get call, append to the response
+		 *
+		 * So, for now it should show :
+		 *
+		 * Hello from the Microservice 1 + " Response from MS2 " + Hello from the Microservice 2
+		 */
+
+		String response = microservice2Client.getMessage();
+		return new ResponseEntity("Hello from the Microservice 1 " + " Response from MS2 " + response, HttpStatus.OK);
 	}
 
 }
