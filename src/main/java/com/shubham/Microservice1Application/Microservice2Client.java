@@ -6,7 +6,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 /**
  * This class will be responsible for communicating with Microservice2
  */
-@FeignClient(name = "myFeignClient", url = "http://localhost:7072/")
+//@FeignClient(name = "myFeignClient", url = "http://localhost:7072/")  --> Hardcoding the ip and port
+
+  @FeignClient (name = "MICROSERVICE2") //fetching from eureka server
 public interface Microservice2Client {
 
     /**
