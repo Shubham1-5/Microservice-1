@@ -4,6 +4,7 @@ import org.apache.logging.log4j.message.DefaultFlowMessageFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.http.HttpStatus;
@@ -35,6 +36,9 @@ public class Microservice1Application {
 	@Autowired
 	private Microservice2Client microservice2Client;
 
+	@Autowired
+	private ServerProperties serverProperties;
+
 	public static void main(String[] args) {
 		SpringApplication.run(Microservice1Application.class, args);
 	}
@@ -51,6 +55,13 @@ public class Microservice1Application {
 		 *
 		 * Hello from the Microservice 1 + " Response from MS2 " + Hello from the Microservice 2
 		 */
+
+		/**
+		 * Some identifier for the running instance
+		 *
+		 * The running portNumber
+		 */
+		System.out.println("The port number hit is :" + serverProperties.getPort());
 
 		String response = microservice2Client.getMessage();
 		return new ResponseEntity("Hello from the Microservice 1 " + " Response from MS2 " + response, HttpStatus.OK);
